@@ -49,7 +49,7 @@ Apophyllite tetragonal habit has three principal growth sectors:
 | **Pyramidal termination** | {111} | Intermediate growth rate | Intermediate properties, steeper angle |
 
 The color distribution also varies by sector:
-- **Green** (Cu trace): preferentially incorporates in prism sectors during faster growth
+- **Green** (V⁴⁺ trace, 1600 ppm in Poona/Deccan material — Rossman 1974): preferentially incorporates in faster-growing prism sectors. *Note: Cu is sometimes cited in loose tertiary sources but is not supported for Deccan apophyllite; V⁴⁺ is the documented chromophore for this locality.*
 - **Clear/colorless**: basal sectors, water-dominated, less trace-element uptake
 - **"Cinnamon" phantom**: hematite inclusions from specific growth episodes, visible in prism sectors
 
@@ -91,7 +91,7 @@ This is **not a new mineral entry**. It's a **habit-variant + render-logic addit
     "prism_100": {
       "luster": "vitreous",
       "transparency": 0.9,
-      "color_priority": "Cu_green",
+      "color_priority": "V_green",
       "fluorescence_intensity": 1.0
     },
     "basal_001": {
@@ -119,7 +119,7 @@ IF crystal.species == apophyllite AND crystal.habit_variant == "sector_zoned"
   FOR each growth_sector in [prism, basal, pyramidal]
     SET material.luster = sector.luster
     SET material.transparency = sector.transparency
-    SET material.color = resolve_color(sector.color_priority, fluid.trace_Cu)
+    SET material.color = resolve_color(sector.color_priority, fluid.trace_V)
     SET material.fluorescence = sector.fluorescence_intensity * base_fluorescence
   
   // Exfoliation state (post-thermal event >200°C)
@@ -133,13 +133,13 @@ IF crystal.species == apophyllite AND crystal.habit_variant == "sector_zoned"
 #### Color Resolution by Sector
 
 ```
-FUNCTION resolve_color(priority, fluid_Cu_ppm)
-  IF priority == "Cu_green" AND fluid_Cu_ppm > threshold
+FUNCTION resolve_color(priority, fluid_V_ppm)
+  IF priority == "V_green" AND fluid_V_ppm > threshold
     RETURN green_apophyllite
   ELSE IF priority == "clear"
     RETURN colorless_clear
   ELSE IF priority == "intermediate"
-    RETURN mix(clear, green, fluid_Cu_ppm / (2 * threshold))
+    RETURN mix(clear, green, fluid_V_ppm / (2 * threshold))
   ELSE
     RETURN base_colorless
 ```
@@ -188,4 +188,14 @@ This is a **render-only variant**, not a growth mechanic. The crystal would spaw
 
 ---
 
-*Sector-zoning in apophyllite is not a mineralogical novelty — it's the reason the mineral is famous among optical mineralogists. The vugg just renders what the microscope already sees.*
+## Correction Log
+
+| Date | Issue | Original | Corrected | Source |
+|------|-------|----------|-----------|--------|
+| 2026-06-21 | Chromophore | Cu²⁺ asserted as green colorant | **V⁴⁺** at 1600 ppm for Poona/Deccan | Rossman 1974, Am. Mineral. |
+| 2026-06-21 | Sector-zoning framing | None (correct in original) | Builder initially called it "not real sector zoning, just dichroism"; verification confirmed anomalous birefringence + variable optic sign = **real growth-sector zoning** | Multiple optical mineralogy sources |
+| 2026-06-21 | Color geometry | No direct measurement | Prism-green / basal-clear waist = **reasoned model** from fast-sector impurity-trapping principle, not measured sector map | Standard sector-zoning theory; no accessible apophyllite-specific data |
+
+*Disagreement-as-blind-spot-detector: each side caught an error. The chromophore was mine (confabulated Cu); the sector-zoning reality was the doc's (confirmed by verification). The color geometry remains a reasoned model — plausible, mechanistically sound, but not directly measured.*
+
+---
